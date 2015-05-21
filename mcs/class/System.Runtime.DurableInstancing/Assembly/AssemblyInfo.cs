@@ -65,6 +65,7 @@ using System.Runtime.InteropServices;
 #endif
 
 [assembly: InternalsVisibleTo ("System.Activities, PublicKey=" + AssemblyRef.FrameworkPublicKeyFull2)]
+[assembly: InternalsVisibleTo ("System.Activities.DurableInstancing, PublicKey=" + AssemblyRef.FrameworkPublicKeyFull2)]
 [assembly: InternalsVisibleTo ("System.Runtime.Serialization, PublicKey=" + AssemblyRef.FrameworkPublicKeyFull2)]
 [assembly: InternalsVisibleTo ("System.IdentityModel, PublicKey=" + AssemblyRef.FrameworkPublicKeyFull2)]
 [assembly: InternalsVisibleTo ("System.IdentityModel.Selectors, PublicKey=" + AssemblyRef.FrameworkPublicKeyFull2)]

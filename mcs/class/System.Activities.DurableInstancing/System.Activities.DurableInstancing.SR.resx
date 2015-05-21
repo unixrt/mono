@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="TryLoadRequiresWorkflowType" xml:space="preserve">
+    <value>In order to match and load a runnable instance in the store, the requesting InstanceOwner must have specified a workflow host type when it was created. To do so, add a key-value pair to the CreateWorkflowOwnerCommand.InstanceOwnerMetadata property bag when issuing the command. The key is the WorkflowHostType key provided in the documentation. The value must be an XName and match that of the instances being loaded.</value>
+  </data>
+  <data name="MultipleLockOwnersNotSupported" xml:space="preserve">
+    <value>SqlWorkflowInstanceStore does not support creating more than one lock owner concurrently. Consider setting InstanceStore.DefaultInstanceOwner to share the store among many applications.</value>
+  </data>
+  <data name="CleanupInProgress" xml:space="preserve">
+    <value>SqlWorkflowInstanceStore cannot process the command because store cleanup is currently in progress. Please wait for the cleanup to finish and then try again.</value>
+  </data>
+  <data name="CanNotDefineNullForAPromotion" xml:space="preserve">
+    <value>The {0} promotion collection for promotion name {1} contains a null value.</value>
+  </data>
+  <data name="CannotPromoteXNameTwiceInPromotion" xml:space="preserve">
+    <value>The XName '{0}' is promoted multiple times in the promotion '{1}.' Duplicate XNames are not allowed within the same promotion.</value>
+  </data>
+  <data name="NonWASActivationNotSupported" xml:space="preserve">
+    <value>SqlWorkflowInstanceStore only supports WAS activation.</value>
+  </data>
+  <data name="HostLockExpired" xml:space="preserve">
+    <value>The SqlWorkflowInstanceStore lock has expired. This could have occurred because the SQL Server is busy or because the connection was temporarily lost.</value>
+  </data>
+  <data name="InstanceStoreReadOnly" xml:space="preserve">
+    <value>The SqlWorkflowInstanceStore is read only can cannot be configured further. All configuration of SqlWorkflowInstanceStore must happen before the first InstanceHandle is created.</value>
+  </data>
+  <data name="UnknownSprocResult" xml:space="preserve">
+    <value>Stored procedure returned unknown execution result {0}.</value>
+  </data>
+  <data name="InvalidMetadataValue" xml:space="preserve">
+    <value>Specified value for metadata property '{0}' must be of type {1}.</value>
+  </data>
+  <data name="InvalidLockRenewalPeriod" xml:space="preserve">
+    <value>The supplied lock renewal period {0} is less than the minimum lock renewal period {1}.</value>
+  </data>
+  <data name="InstanceKeyMetadataChangesNotSupported" xml:space="preserve">
+    <value>SqlWorkflowInstanceStore does not support altering key metadata for already existing keys.</value>
+  </data>
+  <data name="DatabaseUpgradeRequiredForCommand" xml:space="preserve">
+    <value>The SqlWorkflowInstanceStore has a database version of '{0}'. InstancePersistenceCommand '{1}' cannot be run against this database version.  Please upgrade the database to '{2}'.</value>
+  </data>
+  <data name="InvalidRunnableInstancesDetectionPeriod" xml:space="preserve">
+    <value>The supplied runnable instances detection period {0} is less than the minimum period allowed {1}.</value>
+  </data>
+  <data name="PromotionAlreadyDefined" xml:space="preserve">
+    <value>The promotion set {0} has already been defined.</value>
+  </data>
+  <data name="TimeoutOnSqlOperation" xml:space="preserve">
+    <value>The operation did not complete within the allotted timeout of {0}. The time allotted to this operation may have been a portion of a longer timeout.</value>
+  </data>
+  <data name="UnknownCompressionOption" xml:space="preserve">
+    <value>The requested compression option {0} is not a valid option.</value>
+  </data>
+  <data name="CannotPromoteAsSqlVariant" xml:space="preserve">
+    <value>The data type '{0}' for the promoted property '{1}' is not supported by SQL. Either change the data type to a supported one or promote the property as a binary value.</value>
+  </data>
+  <data name="IdentityNotSupportedWithActivation" xml:space="preserve">
+    <value>SqlWorkflowInstanceStore does not support activation on InstanceOwners that specify DefinitionIdentities.</value>
+  </data>
+  <data name="HostLockNotFound" xml:space="preserve">
+    <value>The SqlWorkflowInstanceStore lock does not exist in the database. This could have occurred because the SQL Server is busy or because the connection was temporarily lost.</value>
+  </data>
+  <data name="PromotionTooManyDefined" xml:space="preserve">
+    <value>The promotion set {0} has defined {1} {2} promotions, which exceeds the maximum allowed promotions of {3}.</value>
+  </data>
+  <data name="NoPromotionsDefined" xml:space="preserve">
+    <value>The named promotion {0} does not define any promotions.</value>
+  </data>
+  <data name="UnknownDatabaseVersion" xml:space="preserve">
+    <value>The version of the database cannot be determined as no rows were found in System.Activities.DurableInstancing.SqlWorkflowInstanceStoreVersionTable.  This table should contain a single row that corresponds to the version of the framework that it was created with or upgraded to.</value>
+  </data>
+</root>

@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="TrackingDataExtracted" xml:space="preserve">
+    <value>Tracking data {0} extracted in activity {1}.</value>
+  </data>
+  <data name="StartRuntimeWorkItem" xml:space="preserve">
+    <value>Starting execution of a runtime work item for Activity '{0}', DisplayName: '{1}', InstanceId: '{2}'.</value>
+  </data>
+  <data name="FlowchartSwitchDefault" xml:space="preserve">
+    <value>Flowchart '{0}'/FlowSwitch - Default Case was selected.</value>
+  </data>
+  <data name="CompileVbExpressionStart" xml:space="preserve">
+    <value>Compiling VB expression '{0}'</value>
+  </data>
+  <data name="StartFaultWorkItem" xml:space="preserve">
+    <value>Starting execution of a FaultWorkItem for Activity '{0}', DisplayName: '{1}', InstanceId: '{2}'.  The exception was propagated from Activity '{3}', DisplayName: '{4}', InstanceId: '{5}'.</value>
+  </data>
+  <data name="StartCancelActivityWorkItem" xml:space="preserve">
+    <value>Starting execution of a CancelActivityWorkItem for Activity '{0}', DisplayName: '{1}', InstanceId: '{2}'.</value>
+  </data>
+  <data name="CompleteCancelActivityWorkItem" xml:space="preserve">
+    <value>A CancelActivityWorkItem has completed for Activity '{0}', DisplayName: '{1}', InstanceId: '{2}'.</value>
+  </data>
+  <data name="InvokeMethodIsNotStatic" xml:space="preserve">
+    <value>InvokeMethod '{0}' - method is not Static.</value>
+  </data>
+  <data name="FlowchartStart" xml:space="preserve">
+    <value>Flowchart '{0}' - Start has been scheduled.</value>
+  </data>
+  <data name="FlowchartEmpty" xml:space="preserve">
+    <value>Flowchart '{0}' - was executed with no Nodes.</value>
+  </data>
+  <data name="BookmarkScopeInitialized" xml:space="preserve">
+    <value>The BookmarkScope that had TemporaryId: '{0}' has been initialized with Id: '{1}'.</value>
+  </data>
+  <data name="InvokeMethodIsStatic" xml:space="preserve">
+    <value>InvokeMethod '{0}' - method is Static.</value>
+  </data>
+  <data name="CompensationState" xml:space="preserve">
+    <value>CompensableActivity '{0}' is in the '{1}' state.</value>
+  </data>
+  <data name="WorkflowActivitySuspend" xml:space="preserve">
+    <value>WorkflowInstance Id: '{0}' E2E Activity</value>
+  </data>
+  <data name="WorkflowActivityResume" xml:space="preserve">
+    <value>WorkflowInstance Id: '{0}' E2E Activity</value>
+  </data>
+  <data name="SwitchCaseNotFound" xml:space="preserve">
+    <value>The Switch activity '{0}' could not find a Case activity matching the Expression result.</value>
+  </data>
+  <data name="CompleteTransactionContextWorkItem" xml:space="preserve">
+    <value>A TransactionContextWorkItem has completed for Activity '{0}', DisplayName: '{1}', InstanceId: '{2}'.</value>
+  </data>
+  <data name="ActivityCompleted" xml:space="preserve">
+    <value>Activity '{0}', DisplayName: '{1}', InstanceId: '{2}' has completed in the '{3}' state.</value>
+  </data>
+  <data name="CacheRootMetadataStart" xml:space="preserve">
+    <value>CacheRootMetadata started on activity '{0}'</value>
+  </data>
+  <data name="RuntimeTransactionCompletionRequested" xml:space="preserve">
+    <value>Activity '{0}', DisplayName: '{1}', InstanceId: '{2}' has scheduled completion of the runtime transaction.</value>
+  </data>
+  <data name="TryCatchExceptionDuringCancelation" xml:space="preserve">
+    <value>A child activity of the TryCatch activity '{0}' has thrown an exception during cancelation.</value>
+  </data>
+  <data name="InvokeMethodDoesNotUseAsyncPattern" xml:space="preserve">
+    <value>InvokeMethod '{0}' - method does not use asynchronous pattern.</value>
+  </data>
+  <data name="TrackingRecordTruncated" xml:space="preserve">
+    <value>Truncated tracking record {0} written to ETW session with provider {1}. Variables/annotations/user data have been removed</value>
+  </data>
+  <data name="ScheduleCancelActivityWorkItem" xml:space="preserve">
+    <value>A CancelActivityWorkItem has been scheduled for Activity '{0}', DisplayName: '{1}', InstanceId: '{2}'.</value>
+  </data>
+  <data name="FlowchartNextNull" xml:space="preserve">
+    <value>Flowchart '{0}'/FlowStep - Next node is null. Flowchart execution will end.</value>
+  </data>
+  <data name="WorkflowApplicationPersisted" xml:space="preserve">
+    <value>WorkflowApplication Id: '{0}' was Persisted.</value>
+  </data>
+  <data name="StartTransactionContextWorkItem" xml:space="preserve">
+    <value>Starting execution of a TransactionContextWorkItem for Activity '{0}', DisplayName: '{1}', InstanceId: '{2}'.</value>
+  </data>
+  <data name="WorkflowInstanceCanceled" xml:space="preserve">
+    <value>WorkflowInstance Id: '{0}' has completed in the Canceled state.</value>
+  </data>
+  <data name="InvokedMethodThrewException" xml:space="preserve">
+    <value>An exception was thrown in the method called by the activity '{0}'. {1}</value>
+  </data>
+  <data name="WorkflowApplicationIdled" xml:space="preserve">
+    <value>WorkflowApplication Id: '{0}' went idle.</value>
+  </data>
+  <data name="ActivityScheduled" xml:space="preserve">
+    <value>Parent Activity '{0}', DisplayName: '{1}', InstanceId: '{2}' scheduled child Activity '{3}', DisplayName: '{4}', InstanceId: '{5}'.</value>
+  </data>
+  <data name="CompleteExecuteActivityWorkItem" xml:space="preserve">
+    <value>An ExecuteActivityWorkItem has completed for Activity '{0}', DisplayName: '{1}', InstanceId: '{2}'.</value>
+  </data>
+  <data name="InvokeMethodUseAsyncPattern" xml:space="preserve">
+    <value>InvokeMethod '{0}' - method uses asynchronous pattern of '{1}' and '{2}'.</value>
+  </data>
+  <data name="ExitNoPersistBlock" xml:space="preserve">
+    <value>Exiting a no persist block.</value>
+  </data>
+  <data name="StartExecuteActivityWorkItem" xml:space="preserve">
+    <value>Starting execution of an ExecuteActivityWorkItem for Activity '{0}', DisplayName: '{1}', InstanceId: '{2}'.</value>
+  </data>
+  <data name="TrackingValueNotSerializable" xml:space="preserve">
+    <value>The extracted argument/variable '{0}' is not serializable.</value>
+  </data>
+  <data name="TrackingRecordDropped" xml:space="preserve">
+    <value>Size of tracking record {0} exceeds maximum allowed by the ETW session for provider {1}</value>
+  </data>
+  <data name="TryCatchExceptionFromTry" xml:space="preserve">
+    <value>The TryCatch activity '{0}' has caught an exception of type '{1}'.</value>
+  </data>
+  <data name="CacheRootMetadataStop" xml:space="preserve">
+    <value>CacheRootMetadata stopped on activity {0}.</value>
+  </data>
+  <data name="ScheduleTransactionContextWorkItem" xml:space="preserve">
+    <value>A TransactionContextWorkItem has been scheduled for Activity '{0}', DisplayName: '{1}', InstanceId: '{2}'.</value>
+  </data>
+  <data name="WorkflowActivityStop" xml:space="preserve">
+    <value>WorkflowInstance Id: '{0}' E2E Activity</value>
+  </data>
+  <data name="ScheduleCompletionWorkItem" xml:space="preserve">
+    <value>A CompletionWorkItem has been scheduled for parent Activity '{0}', DisplayName: '{1}', InstanceId: '{2}'.  Completed Activity '{3}', DisplayName: '{4}', InstanceId: '{5}'.</value>
+  </data>
+  <data name="WorkflowApplicationUnhandledException" xml:space="preserve">
+    <value>WorkflowInstance Id: '{0}' has encountered an unhandled exception.  The exception originated from Activity '{1}', DisplayName: '{2}'.  The following action will be taken: {3}.</value>
+  </data>
+  <data name="CompleteRuntimeWorkItem" xml:space="preserve">
+    <value>A runtime work item has completed for Activity '{0}', DisplayName: '{1}', InstanceId: '{2}'.</value>
+  </data>
+  <data name="RuntimeTransactionSet" xml:space="preserve">
+    <value>The runtime transaction has been set by Activity '{0}', DisplayName: '{1}', InstanceId: '{2}'.  Execution isolated to Activity '{3}', DisplayName: '{4}', InstanceId: '{5}'.</value>
+  </data>
+  <data name="ExecuteWorkItemStop" xml:space="preserve">
+    <value>Execute work item stop</value>
+  </data>
+  <data name="CompleteBookmarkWorkItem" xml:space="preserve">
+    <value>A BookmarkWorkItem has completed for Activity '{0}', DisplayName: '{1}', InstanceId: '{2}'. BookmarkName: {3}, BookmarkScope: {4}.</value>
+  </data>
+  <data name="WorkflowApplicationCompleted" xml:space="preserve">
+    <value>WorkflowInstance Id: '{0}' has completed in the Closed state.</value>
+  </data>
+  <data name="ScheduleRuntimeWorkItem" xml:space="preserve">
+    <value>A runtime work item has been scheduled for Activity '{0}', DisplayName: '{1}', InstanceId: '{2}'.</value>
+  </data>
+  <data name="WorkflowApplicationUnloaded" xml:space="preserve">
+    <value>WorkflowInstance Id: '{0}' was Unloaded.</value>
+  </data>
+  <data name="StartBookmarkWorkItem" xml:space="preserve">
+    <value>Starting execution of a BookmarkWorkItem for Activity '{0}', DisplayName: '{1}', InstanceId: '{2}'.  BookmarkName: {3}, BookmarkScope: {4}.</value>
+  </data>
+  <data name="EnterNoPersistBlock" xml:space="preserve">
+    <value>Entering a no persist block.</value>
+  </data>
+  <data name="CreateBookmarkScope" xml:space="preserve">
+    <value>A BookmarkScope has been created: {0}.</value>
+  </data>
+  <data name="FlowchartSwitchCaseNotFound" xml:space="preserve">
+    <value>Flowchart '{0}'/FlowSwitch - could find neither a Case activity nor a Default Case matching the Expression result. Flowchart execution will end.</value>
+  </data>
+  <data name="TrackingRecordRaised" xml:space="preserve">
+    <value>Tracking Record {0} raised to {1}.</value>
+  </data>
+  <data name="WorkflowInstanceAborted" xml:space="preserve">
+    <value>WorkflowInstance Id: '{0}' was aborted with an exception.</value>
+  </data>
+  <data name="CreateBookmark" xml:space="preserve">
+    <value>A Bookmark has been created for Activity '{0}', DisplayName: '{1}', InstanceId: '{2}'.  BookmarkName: {3}, BookmarkScope: {4}.</value>
+  </data>
+  <data name="StartCompletionWorkItem" xml:space="preserve">
+    <value>Starting execution of a CompletionWorkItem for parent Activity '{0}', DisplayName: '{1}', InstanceId: '{2}'. Completed Activity '{3}', DisplayName: '{4}', InstanceId: '{5}'.</value>
+  </data>
+  <data name="CompileVbExpressionStop" xml:space="preserve">
+    <value>Finished compiling VB expression.</value>
+  </data>
+  <data name="WorkflowApplicationTerminated" xml:space="preserve">
+    <value>WorkflowApplication Id: '{0}' was terminated. It has completed in the Faulted state with an exception.</value>
+  </data>
+  <data name="CompleteCompletionWorkItem" xml:space="preserve">
+    <value>A CompletionWorkItem has completed for parent Activity '{0}', DisplayName: '{1}', InstanceId: '{2}'. Completed Activity '{3}', DisplayName: '{4}', InstanceId: '{5}'.</value>
+  </data>
+  <data name="FlowchartSwitchCase" xml:space="preserve">
+    <value>Flowchart '{0}'/FlowSwitch - Case '{1}' was selected.</value>
+  </data>
+  <data name="ScheduleExecuteActivityWorkItem" xml:space="preserve">
+    <value>An ExecuteActivityWorkItem has been scheduled for Activity '{0}', DisplayName: '{1}', InstanceId: '{2}'.</value>
+  </data>
+  <data name="WorkflowActivityStart" xml:space="preserve">
+    <value>WorkflowInstance Id: '{0}' E2E Activity</value>
+  </data>
+  <data name="TryCatchExceptionFromCatchOrFinally" xml:space="preserve">
+    <value>A Catch or Finally activity that is associated with the TryCatch activity '{0}' has thrown an exception.</value>
+  </data>
+  <data name="WorkflowApplicationPersistableIdle" xml:space="preserve">
+    <value>WorkflowApplication Id: '{0}' is idle and persistable.  The following action will be taken: {1}.</value>
+  </data>
+  <data name="InternalCacheMetadataStart" xml:space="preserve">
+    <value>InternalCacheMetadata started on activity '{0}'.</value>
+  </data>
+  <data name="CompleteFaultWorkItem" xml:space="preserve">
+    <value>A FaultWorkItem has completed for Activity '{0}', DisplayName: '{1}', InstanceId: '{2}'. The exception was propagated from Activity '{3}', DisplayName: '{4}', InstanceId: '{5}'.</value>
+  </data>
+  <data name="RuntimeTransactionComplete" xml:space="preserve">
+    <value>The runtime transaction has completed with the state '{0}'.</value>
+  </data>
+  <data name="InArgumentBound" xml:space="preserve">
+    <value>In argument '{0}' on Activity '{1}', DisplayName: '{2}', InstanceId: '{3}' has been bound with value: {4}.</value>
+  </data>
+  <data name="ExecuteWorkItemStart" xml:space="preserve">
+    <value>Execute work item start</value>
+  </data>
+  <data name="InternalCacheMetadataStop" xml:space="preserve">
+    <value>InternalCacheMetadata stopped on activity '{0}'.</value>
+  </data>
+  <data name="ScheduleFaultWorkItem" xml:space="preserve">
+    <value>A FaultWorkItem has been scheduled for Activity '{0}', DisplayName: '{1}', InstanceId: '{2}'.  The exception was propagated from Activity '{3}', DisplayName: '{4}', InstanceId: '{5}'.</value>
+  </data>
+  <data name="ScheduleBookmarkWorkItem" xml:space="preserve">
+    <value>A BookmarkWorkItem has been scheduled for Activity '{0}', DisplayName: '{1}', InstanceId: '{2}'.  BookmarkName: {3}, BookmarkScope: {4}.</value>
+  </data>
+</root>

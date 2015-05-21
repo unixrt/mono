@@ -219,6 +219,13 @@ xbuild_4_0_dirs := \
 	$(xbuild_2_0_dirs)	\
 	Microsoft.Build
 
+winfx_4_5_dirs := \
+	System.Activities \
+	System.Activities.DurableIntancing \
+	System.Workflow.ComponentModel \
+	System.Workflow.Runtime \
+	System.Workflow.Activities
+
 monodroid_SUBDIRS := $(monodroid_dirs)
 monotouch_SUBDIRS := $(monotouch_dirs)
 monotouch_runtime_SUBDIRS := $(monotouch_runtime_dirs)
@@ -226,7 +233,7 @@ mobile_static_SUBDIRS := $(mobile_static_dirs)
 mobile_SUBDIRS := $(mobile_dynamic_dirs)
 xammac_SUBDIRS := $(xammac_dirs)
 binary_reference_assemblies_SUBDIRS := reference-assemblies
-net_4_5_SUBDIRS := $(net_4_5_dirs) $(xbuild_4_0_dirs)
+net_4_5_SUBDIRS := $(net_4_5_dirs) $(xbuild_4_0_dirs) $(winfx_4_5_dirs)
 net_4_5_PARALLEL_SUBDIRS := $(net_4_5_parallel_dirs) aot-compiler
 xbuild_12_SUBDIRS := $(xbuild_4_0_dirs)
 xbuild_14_SUBDIRS := $(xbuild_4_0_dirs)

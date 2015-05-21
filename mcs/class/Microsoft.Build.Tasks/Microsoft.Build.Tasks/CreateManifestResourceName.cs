@@ -131,6 +131,12 @@ namespace Microsoft.Build.Tasks {
 		public ITaskItem[] ManifestResourceNames {
 			get { return manifestResourceNames; }
 		}
+
+                [Output]
+                public ITaskItem[] ResourceFilesWithManifestResourceNames {
+                        get { return manifestResourceNames; }
+			set { manifestResourceNames = value; }
+                }
 		
 		[Required]
 		public ITaskItem[] ResourceFiles {
