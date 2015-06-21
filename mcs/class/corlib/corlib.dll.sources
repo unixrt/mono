@@ -214,7 +214,6 @@ System.IO/SearchPattern.cs
 System.IO/SeekOrigin.cs
 System.IO/UnexceptionalStreamReader.cs
 System.IO/UnexceptionalStreamWriter.cs
-System.IO/UnmanagedMemoryAccessor.cs
 System.IO.IsolatedStorage/INormalizeForIsolatedStorage.cs
 System.IO.IsolatedStorage/IsolatedStorage.cs
 System.IO.IsolatedStorage/IsolatedStorageException.cs
@@ -910,6 +909,7 @@ ReferenceSources/Buffer.cs
 ReferenceSources/TextInfo.cs
 ReferenceSources/win32native.cs
 ReferenceSources/SharedStatics.cs
+ReferenceSources/SecurityContext.cs
 
 ../../../external/referencesource/mscorlib/system/__filters.cs
 ../../../external/referencesource/mscorlib/system/__hresults.cs
@@ -996,6 +996,7 @@ ReferenceSources/SharedStatics.cs
 ../../../external/referencesource/mscorlib/system/int64.cs
 ../../../external/referencesource/mscorlib/system/iobservable.cs
 ../../../external/referencesource/mscorlib/system/iobserver.cs
+../../../external/referencesource/mscorlib/system/io/unmanagedmemoryaccessor.cs
 ../../../external/referencesource/mscorlib/system/iprogress.cs
 ../../../external/referencesource/mscorlib/system/iserviceobjectprovider.cs
 ../../../external/referencesource/mscorlib/system/invalidtimezoneexception.cs
@@ -1267,6 +1268,7 @@ ReferenceSources/SharedStatics.cs
 ../../../external/referencesource/mscorlib/system/runtime/exceptionservices/exceptionservicescommon.cs
 
 ../../../external/referencesource/mscorlib/system/runtime/interopservices/attributes.cs
+../../../external/referencesource/mscorlib/system/runtime/interopservices/safehandle.cs
 ../../../external/referencesource/mscorlib/system/runtime/interopservices/ucomienumconnections.cs
 
 ../../../external/referencesource/mscorlib/system/runtime/interopservices/ComTypes/ibindctx.cs

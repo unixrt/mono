@@ -113,7 +113,7 @@
 #endif
 
 /* Version number of the AOT file format */
-#define MONO_AOT_FILE_VERSION 115
+#define MONO_AOT_FILE_VERSION 117
 
 //TODO: This is x86/amd64 specific.
 #define mono_simd_shuffle_mask(a,b,c,d) ((a) | ((b) << 2) | ((c) << 4) | ((d) << 6))
@@ -124,6 +124,8 @@
 #endif
 
 #define MONO_TYPE_IS_PRIMITIVE(t) ((!(t)->byref && ((((t)->type >= MONO_TYPE_BOOLEAN && (t)->type <= MONO_TYPE_R8) || ((t)->type >= MONO_TYPE_I && (t)->type <= MONO_TYPE_U)))))
+
+#define MONO_AOT_TRAMP_PAGE_SIZE 16384
 
 /* Constants used to encode different types of methods in AOT */
 enum {
@@ -174,6 +176,7 @@ typedef enum {
 	MONO_AOT_FILE_FLAG_WITH_LLVM = 1,
 	MONO_AOT_FILE_FLAG_FULL_AOT = 2,
 	MONO_AOT_FILE_FLAG_DEBUG = 4,
+	MONO_AOT_FILE_FLAG_LLVM_THUMB = 8,
 } MonoAotFileFlags;
 
 /* This structure is stored in the AOT file */
@@ -226,10 +229,6 @@ typedef struct MonoAotFileInfo
 	gpointer static_rgctx_trampolines;
 	gpointer imt_thunks;
 	gpointer gsharedvt_arg_trampolines;
-	/*
-	 * The end of LLVM generated thumb code, or NULL.
-	 */
-	gpointer thumb_end;
 	/* In static mode, points to a table of global symbols for trampolines etc */
 	gpointer globals;
 	/* Points to a string containing the assembly name*/
@@ -2207,7 +2206,7 @@ MonoInst *mono_get_got_var (MonoCompile *cfg);
 void      mono_add_seq_point (MonoCompile *cfg, MonoBasicBlock *bb, MonoInst *ins, int native_offset);
 void      mono_add_var_location (MonoCompile *cfg, MonoInst *var, gboolean is_reg, int reg, int offset, int from, int to);
 MonoInst* mono_emit_jit_icall (MonoCompile *cfg, gconstpointer func, MonoInst **args);
-MonoInst* mono_emit_jit_icall_by_info (MonoCompile *cfg, MonoJitICallInfo *info, MonoInst **args, MonoBasicBlock **out_cbb);
+MonoInst* mono_emit_jit_icall_by_info (MonoCompile *cfg, MonoJitICallInfo *info, MonoInst **args);
 MonoInst* mono_emit_method_call (MonoCompile *cfg, MonoMethod *method, MonoInst **args, MonoInst *this);
 void      mono_create_helper_signatures (void);
 
@@ -2360,7 +2359,6 @@ gpointer          mono_create_jump_trampoline (MonoDomain *domain,
 											   MonoMethod *method, 
 											   gboolean add_sync_wrapper);
 gpointer          mono_create_class_init_trampoline (MonoVTable *vtable);
-gpointer          mono_create_generic_class_init_trampoline (void);
 gpointer          mono_create_jit_trampoline (MonoMethod *method);
 gpointer          mono_create_jit_trampoline_from_token (MonoImage *image, guint32 token);
 gpointer          mono_create_jit_trampoline_in_domain (MonoDomain *domain, MonoMethod *method) MONO_LLVM_INTERNAL;
@@ -2436,7 +2434,7 @@ int               mono_method_to_ir (MonoCompile *cfg, MonoMethod *method, MonoB
 									 MonoInst *return_var, MonoInst **inline_args,
 									 guint inline_offset, gboolean is_virtual_call);
 
-MonoInst         *mono_decompose_opcode (MonoCompile *cfg, MonoInst *ins, MonoBasicBlock **out_cbb);
+MonoInst         *mono_decompose_opcode (MonoCompile *cfg, MonoInst *ins);
 void              mono_decompose_long_opts (MonoCompile *cfg);
 void              mono_decompose_vtype_opts (MonoCompile *cfg);
 void              mono_decompose_vtype_opts_llvm (MonoCompile *cfg);
@@ -2468,7 +2466,6 @@ void      mono_arch_exceptions_init             (void);
 guchar*   mono_arch_create_generic_trampoline   (MonoTrampolineType tramp_type, MonoTrampInfo **info, gboolean aot);
 gpointer  mono_arch_create_rgctx_lazy_fetch_trampoline (guint32 slot, MonoTrampInfo **info, gboolean aot);
 gpointer  mono_arch_create_general_rgctx_lazy_fetch_trampoline (MonoTrampInfo **info, gboolean aot);
-gpointer  mono_arch_create_generic_class_init_trampoline (MonoTrampInfo **info, gboolean aot);
 gpointer  mono_arch_get_nullified_class_init_trampoline (MonoTrampInfo **info);
 guint8*   mono_arch_create_sdb_trampoline (gboolean single_step, MonoTrampInfo **info, gboolean aot);
 gpointer  mono_arch_create_monitor_enter_trampoline (MonoTrampInfo **info, gboolean is_v4, gboolean aot);
@@ -2755,10 +2752,10 @@ gboolean
 mono_class_generic_sharing_enabled (MonoClass *class);
 
 gpointer
-mono_class_fill_runtime_generic_context (MonoVTable *class_vtable, guint8 *caller, guint32 slot);
+mono_class_fill_runtime_generic_context (MonoVTable *class_vtable, guint32 slot);
 
 gpointer
-mono_method_fill_runtime_generic_context (MonoMethodRuntimeGenericContext *mrgctx, guint8 *caller, guint32 slot);
+mono_method_fill_runtime_generic_context (MonoMethodRuntimeGenericContext *mrgctx, guint32 slot);
 
 MonoMethodRuntimeGenericContext*
 mono_method_lookup_rgctx (MonoVTable *class_vtable, MonoGenericInst *method_inst);
@@ -2840,6 +2837,7 @@ MonoType* mini_type_get_underlying_type (MonoGenericSharingContext *gsctx, MonoT
 MonoMethod* mini_get_shared_method (MonoMethod *method);
 MonoMethod* mini_get_shared_method_to_register (MonoMethod *method);
 MonoMethod* mini_get_shared_method_full (MonoMethod *method, gboolean all_vt, gboolean is_gsharedvt);
+int mini_get_rgctx_entry_slot (MonoJumpInfoRgctxEntry *entry);
 
 int mini_type_stack_size (MonoGenericSharingContext *gsctx, MonoType *t, int *align);
 int mini_type_stack_size_full (MonoGenericSharingContext *gsctx, MonoType *t, guint32 *align, gboolean pinvoke);
@@ -2958,12 +2956,6 @@ void MONO_SIG_HANDLER_SIGNATURE (mono_sigill_signal_handler) ;
 void MONO_SIG_HANDLER_SIGNATURE (mono_sigsegv_signal_handler);
 void MONO_SIG_HANDLER_SIGNATURE (mono_sigint_signal_handler) ;
 gboolean MONO_SIG_HANDLER_SIGNATURE (mono_chain_signal);
-
-#ifdef MONO_ARCH_HAVE_CREATE_DELEGATE_TRAMPOLINE
-#define ARCH_HAVE_DELEGATE_TRAMPOLINES 1
-#else
-#define ARCH_HAVE_DELEGATE_TRAMPOLINES 0
-#endif
 
 #ifdef MONO_ARCH_HAVE_OP_TAIL_CALL
 #define ARCH_HAVE_OP_TAIL_CALL 1

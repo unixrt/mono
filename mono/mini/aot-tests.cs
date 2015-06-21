@@ -3,6 +3,7 @@ using System.Text;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
+using System.Collections.Generic;
 
 /*
  * Regression tests for the AOT/FULL-AOT code.
@@ -105,6 +106,7 @@ class Tests
 		return 0;
 	}
 
+	[Category ("DYNCALL")]
 	[Category ("GSHAREDVT")]
 	static int test_0_arm64_dyncall_gsharedvt_out_hfa_double () {
 		/* gsharedvt out trampoline with double hfa argument */
@@ -123,6 +125,7 @@ class Tests
 		return 0;
 	}
 
+	[Category ("DYNCALL")]
 	[Category ("GSHAREDVT")]
 	static int test_0_arm64_dyncall_gsharedvt_out_hfa_float () {
 		/* gsharedvt out trampoline with double hfa argument */
@@ -199,4 +202,59 @@ class Tests
 		return 0;
 	}
 
+	static int test_0_partial_sharing_regress_30204 () {
+		var t = typeof (System.Collections.Generic.Comparer<System.Collections.Generic.KeyValuePair<string, string>>);
+		var d = new SortedDictionary<string, string> ();
+		d.Add ("key1", "banana");
+		return d ["key1"] == "banana" ? 0 : 1;
+	}
+
+	class NullableMethods {
+		[MethodImplAttribute (MethodImplOptions.NoInlining)]
+		public static bool GetHasValue<T>(Nullable<T> value) where T : struct {
+			return value.HasValue;
+		}
+
+		[MethodImplAttribute (MethodImplOptions.NoInlining)]
+		public static T GetValue<T>(Nullable<T> value) where T : struct {
+			return value.Value;
+		}
+	}
+
+	[Category ("DYNCALL")]
+	public static int test_0_dyncall_nullable () {
+		int? v;
+
+		v = 42;
+		NullableMethods.GetHasValue (v);
+		bool b = (bool)typeof (NullableMethods).GetMethod ("GetHasValue").MakeGenericMethod (new Type [] { typeof (int) }).Invoke (null, new object [] { v });
+		if (!b)
+			return 1;
+		v = null;
+		b = (bool)typeof (NullableMethods).GetMethod ("GetHasValue").MakeGenericMethod (new Type [] { typeof (int) }).Invoke (null, new object [] { v });
+		if (b)
+			return 2;
+
+		v = 42;
+		NullableMethods.GetValue (v);
+		var res = (int)typeof (NullableMethods).GetMethod ("GetValue").MakeGenericMethod (new Type [] { typeof (int) }).Invoke (null, new object [] { v });
+		if (res != 42)
+			return 3;
+		return 0;
+	}
+
+	enum AnEnum {
+		A = 0,
+		B = 1
+	}
+
+	public static int test_0_enum_eq_comparer () {
+		var c = EqualityComparer<AnEnum>.Default;
+		return (!c.Equals (AnEnum.A, AnEnum.B) && c.Equals (AnEnum.A, AnEnum.A)) ? 0 : 1;
+	}
+
+	public static int test_0_enum_comparer () {
+		var c = Comparer<AnEnum>.Default;
+		return c.Compare (AnEnum.A, AnEnum.A);
+	}
 }

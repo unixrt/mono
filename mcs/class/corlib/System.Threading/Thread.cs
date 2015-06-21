@@ -116,7 +116,6 @@ namespace System.Threading {
 		#region Sync with metadata/object-internals.h
 		private InternalThread internal_thread;
 		object m_ThreadStartArg;
-		private ExecutionContext ec_to_set;
 		#endregion
 #pragma warning restore 414
 
@@ -127,17 +126,11 @@ namespace System.Threading {
 		CultureInfo current_culture;
 		CultureInfo current_ui_culture;
 
-		// the name of current_thread and _ec is
+		// the name of current_thread is
 		// important because they are used by the runtime.
 
 		[ThreadStatic]
 		static Thread current_thread;
-
-		/* The actual ExecutionContext of the thread.  It's
-		   ThreadStatic so that it's not shared between
-		   AppDomains. */
-		[ThreadStatic]
-		static ExecutionContext _ec;
 
 		static internal CultureInfo default_culture;
 		static internal CultureInfo default_ui_culture;
@@ -318,51 +311,9 @@ namespace System.Threading {
 		[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		public extern static int GetDomainID();
 
-		[MethodImplAttribute(MethodImplOptions.InternalCall)]
-		private extern static void ResetAbort_internal();
-
-		[SecurityPermission (SecurityAction.Demand, ControlThread=true)]
-		public static void ResetAbort ()
-		{
-			ResetAbort_internal ();
-		}
-
-		[HostProtectionAttribute (SecurityAction.LinkDemand, Synchronization = true, ExternalThreading = true)]
-		[MethodImplAttribute(MethodImplOptions.InternalCall)]
-		[ReliabilityContract (Consistency.WillNotCorruptState, Cer.Success)]
-		public extern static bool Yield ();
-
-
-		[MethodImplAttribute(MethodImplOptions.InternalCall)]
-		private extern static void Sleep_internal(int ms);
-
-		public static void Sleep (int millisecondsTimeout)
-		{
-			if (millisecondsTimeout < Timeout.Infinite)
-				throw new ArgumentOutOfRangeException ("millisecondsTimeout", "Negative timeout");
-
-			Sleep_internal (millisecondsTimeout);
-		}
-
-		public static void Sleep (TimeSpan timeout)
-		{
-			long ms = (long) timeout.TotalMilliseconds;
-			if (ms < Timeout.Infinite || ms > Int32.MaxValue)
-				throw new ArgumentOutOfRangeException ("timeout", "timeout out of range");
-
-			Sleep_internal ((int) ms);
-		}
-
 		// Returns the system thread handle
 		[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		private extern IntPtr Thread_internal (MulticastDelegate start);
-
-		public Thread(ThreadStart start) {
-			if(start==null) {
-				throw new ArgumentNullException("Null ThreadStart");
-			}
-			m_Delegate=start;
-		}
 
 		private Thread (InternalThread it) {
 			internal_thread = it;
@@ -504,17 +455,6 @@ namespace System.Threading {
 			}
 		}
 
-		public ThreadPriority Priority {
-			get {
-				return (ThreadPriority)GetPriority (Internal);
-			}
-			
-			set {
-				// FIXME: This doesn't do anything yet
-				SetPriority (Internal, (int)value);
-			}
-		}
-
 		public ThreadState ThreadState {
 			get {
 				return GetState (Internal);
@@ -523,12 +463,6 @@ namespace System.Threading {
 
 		[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		private extern static void Abort_internal (InternalThread thread, object stateInfo);
-
-		[MethodImplAttribute(MethodImplOptions.InternalCall)]
-		private extern static int GetPriority (InternalThread thread);
-
-		[MethodImplAttribute(MethodImplOptions.InternalCall)]
-		private extern static void SetPriority (InternalThread thread, int priority);
 
 		[SecurityPermission (SecurityAction.Demand, ControlThread=true)]
 		public void Abort () 
@@ -551,53 +485,8 @@ namespace System.Threading {
 			}
 		}
 
-		[MethodImplAttribute (MethodImplOptions.InternalCall)]
-		private extern static void Interrupt_internal (InternalThread thread);
-		
-		[SecurityPermission (SecurityAction.Demand, ControlThread=true)]
-		public void Interrupt ()
+		void ClearAbortReason ()
 		{
-			Interrupt_internal (Internal);
-		}
-
-		// The current thread joins with 'this'. Set ms to 0 to block
-		// until this actually exits.
-		[MethodImplAttribute(MethodImplOptions.InternalCall)]
-		private extern static bool Join_internal(InternalThread thread, int ms, IntPtr handle);
-		
-		public void Join()
-		{
-			Join_internal(Internal, Timeout.Infinite, Internal.system_thread_handle);
-		}
-
-		public bool Join(int millisecondsTimeout)
-		{
-			if (millisecondsTimeout < Timeout.Infinite)
-				throw new ArgumentOutOfRangeException ("millisecondsTimeout", "Timeout less than zero");
-
-			return Join_internal (Internal, millisecondsTimeout, Internal.system_thread_handle);
-		}
-
-		public bool Join(TimeSpan timeout)
-		{
-			long ms = (long) timeout.TotalMilliseconds;
-			if (ms < Timeout.Infinite || ms > Int32.MaxValue)
-				throw new ArgumentOutOfRangeException ("timeout", "timeout out of range");
-
-			return Join_internal (Internal, (int) ms, Internal.system_thread_handle);
-		}
-
-		[MethodImplAttribute(MethodImplOptions.InternalCall)]
-		public extern static void MemoryBarrier ();
-
-		[MethodImplAttribute(MethodImplOptions.InternalCall)]
-		private extern void Resume_internal();
-
-		[Obsolete ("")]
-		[SecurityPermission (SecurityAction.Demand, ControlThread=true)]
-		public void Resume () 
-		{
-			Resume_internal ();
 		}
 
 		[MethodImplAttribute (MethodImplOptions.InternalCall)]
@@ -615,57 +504,17 @@ namespace System.Threading {
 			}
 		}
 
-		static internal ContextCallback _ccb = new ContextCallback(ThreadStart_Context);
-
-		static private void ThreadStart_Context(Object state)
+		void StartInternal (IPrincipal principal, ref StackCrawlMark stackMark)
 		{
-			var t = (Thread)state;
-			if (t.m_Delegate is ThreadStart)
-			{
-				((ThreadStart)t.m_Delegate)();
-			}
-			else
-			{
-				((ParameterizedThreadStart)t.m_Delegate)(t.m_ThreadStartArg);
-			}
-		}
-
-		private void StartInternal ()
-		{
-			current_thread = this;
-
-			if (_ec != null) {
-				ExecutionContext.Run (_ec, _ccb, (Object)this);
-				return;
-			}
-
-			if (m_Delegate is ThreadStart) {
-				((ThreadStart) m_Delegate) ();
-			} else {
-				((ParameterizedThreadStart) m_Delegate) (m_ThreadStartArg);
-			}
-		}
-
-		public void Start() {
-			StackCrawlMark stackMark = default (StackCrawlMark);
-			// TODO: Use SetExecutionContextHelper to remove 2 of 3 levels of indirections
-			ec_to_set = ExecutionContext.Capture (ref stackMark, ExecutionContext.CaptureOptions.IgnoreSyncCtx);
-
+#if FEATURE_ROLE_BASED_SECURITY
 			Internal._serialized_principal = CurrentThread.Internal._serialized_principal;
+#endif
 
 			// Thread_internal creates and starts the new thread, 
-			if (Thread_internal((ThreadStart) StartInternal) == (IntPtr) 0)
+			if (Thread_internal(m_Delegate) == IntPtr.Zero)
 				throw new SystemException ("Thread creation failed.");
-		}
 
-		[MethodImplAttribute(MethodImplOptions.InternalCall)]
-		private extern static void Suspend_internal(InternalThread thread);
-
-		[Obsolete ("")]
-		[SecurityPermission (SecurityAction.Demand, ControlThread=true)]
-		public void Suspend ()
-		{
-			Suspend_internal (Internal);
+			m_ThreadStartArg = null;
 		}
 
 		[MethodImplAttribute (MethodImplOptions.InternalCall)]
@@ -770,6 +619,9 @@ namespace System.Threading {
 
 		static int GetProcessDefaultStackSize (int maxStackSize)
 		{
+			if (maxStackSize == 0)
+				return 0;
+
 			if (maxStackSize < 131072) // make sure stack is at least 128k big
 				return 131072;
 
@@ -848,12 +700,6 @@ namespace System.Threading {
 		public override int GetHashCode ()
 		{
 			return ManagedThreadId;
-		}
-
-		public void Start (object parameter)
-		{
-			m_ThreadStartArg = parameter;
-			Start ();
 		}
 
 		internal CultureInfo GetCurrentUICultureNoAppX ()

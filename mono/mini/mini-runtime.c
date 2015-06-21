@@ -260,7 +260,7 @@ mono_print_method_from_ip (void *ip)
 	gsctx = mono_jit_info_get_generic_sharing_context (ji);
 	shared_type = "";
 	if (gsctx) {
-		if (gsctx->var_is_vt || gsctx->mvar_is_vt)
+		if (gsctx->is_gsharedvt)
 			shared_type = "gsharedvt ";
 		else
 			shared_type = "gshared ";
@@ -1174,12 +1174,10 @@ mono_patch_info_hash (gconstpointer data)
 	case MONO_PATCH_INFO_IID:
 	case MONO_PATCH_INFO_ADJUSTED_IID:
 	case MONO_PATCH_INFO_CLASS_INIT:
-	case MONO_PATCH_INFO_GENERIC_CLASS_INIT:
 	case MONO_PATCH_INFO_METHODCONST:
 	case MONO_PATCH_INFO_METHOD:
 	case MONO_PATCH_INFO_METHOD_JUMP:
 	case MONO_PATCH_INFO_IMAGE:
-	case MONO_PATCH_INFO_JIT_ICALL_ADDR:
 	case MONO_PATCH_INFO_ICALL_ADDR:
 	case MONO_PATCH_INFO_FIELD:
 	case MONO_PATCH_INFO_SFLDA:
@@ -1225,6 +1223,8 @@ mono_patch_info_hash (gconstpointer data)
 
 		return (ji->type << 8) | (gssize)info->klass | (gssize)info->method;
 	}
+	case MONO_PATCH_INFO_JIT_ICALL_ADDR:
+		return (ji->type << 8) | g_str_hash (ji->data.target);
 	default:
 		printf ("info type: %d\n", ji->type);
 		mono_print_ji (ji); printf ("\n");
@@ -1284,6 +1284,10 @@ mono_patch_info_equal (gconstpointer ka, gconstpointer kb)
 		return ji1->data.index == ji2->data.index;
 	case MONO_PATCH_INFO_VIRT_METHOD:
 		return ji1->data.virt_method->klass == ji2->data.virt_method->klass && ji1->data.virt_method->method == ji2->data.virt_method->method;
+	case MONO_PATCH_INFO_JIT_ICALL_ADDR:
+		if (ji1->data.target == ji2->data.target)
+			return 1;
+		return strcmp (ji1->data.target, ji2->data.target) == 0 ? 1 : 0;
 	default:
 		if (ji1->data.target != ji2->data.target)
 			return 0;
@@ -1587,69 +1591,11 @@ mono_resolve_patch_target (MonoMethod *method, MonoDomain *domain, guint8 *code,
 	case MONO_PATCH_INFO_NONE:
 		break;
 	case MONO_PATCH_INFO_RGCTX_FETCH: {
-		MonoJumpInfoRgctxEntry *entry = patch_info->data.rgctx_entry;
-		guint32 slot = -1;
-
-		switch (entry->data->type) {
-		case MONO_PATCH_INFO_CLASS:
-			slot = mono_method_lookup_or_register_info (entry->method, entry->in_mrgctx, &entry->data->data.klass->byval_arg, entry->info_type, mono_method_get_context (entry->method));
-			break;
-		case MONO_PATCH_INFO_METHOD:
-		case MONO_PATCH_INFO_METHODCONST:
-			slot = mono_method_lookup_or_register_info (entry->method, entry->in_mrgctx, entry->data->data.method, entry->info_type, mono_method_get_context (entry->method));
-			break;
-		case MONO_PATCH_INFO_FIELD:
-			slot = mono_method_lookup_or_register_info (entry->method, entry->in_mrgctx, entry->data->data.field, entry->info_type, mono_method_get_context (entry->method));
-			break;
-		case MONO_PATCH_INFO_SIGNATURE:
-			slot = mono_method_lookup_or_register_info (entry->method, entry->in_mrgctx, entry->data->data.sig, entry->info_type, mono_method_get_context (entry->method));
-			break;
-		case MONO_PATCH_INFO_GSHAREDVT_CALL: {
-			MonoJumpInfoGSharedVtCall *call_info = g_malloc0 (sizeof (MonoJumpInfoGSharedVtCall)); //mono_domain_alloc0 (domain, sizeof (MonoJumpInfoGSharedVtCall));
-
-			memcpy (call_info, entry->data->data.gsharedvt, sizeof (MonoJumpInfoGSharedVtCall));
-			slot = mono_method_lookup_or_register_info (entry->method, entry->in_mrgctx, call_info, entry->info_type, mono_method_get_context (entry->method));
-			break;
-		}
-		case MONO_PATCH_INFO_GSHAREDVT_METHOD: {
-			MonoGSharedVtMethodInfo *info;
-			MonoGSharedVtMethodInfo *oinfo = entry->data->data.gsharedvt_method;
-			int i;
-
-			/* Make a copy into the domain mempool */
-			info = g_malloc0 (sizeof (MonoGSharedVtMethodInfo)); //mono_domain_alloc0 (domain, sizeof (MonoGSharedVtMethodInfo));
-			info->method = oinfo->method;
-			info->num_entries = oinfo->num_entries;
-			info->entries = g_malloc0 (sizeof (MonoRuntimeGenericContextInfoTemplate) * info->num_entries);
-			for (i = 0; i < oinfo->num_entries; ++i) {
-				MonoRuntimeGenericContextInfoTemplate *otemplate = &oinfo->entries [i];
-				MonoRuntimeGenericContextInfoTemplate *template = &info->entries [i];
-
-				memcpy (template, otemplate, sizeof (MonoRuntimeGenericContextInfoTemplate));
-			}
-			slot = mono_method_lookup_or_register_info (entry->method, entry->in_mrgctx, info, entry->info_type, mono_method_get_context (entry->method));
-			break;
-		}
-		case MONO_PATCH_INFO_VIRT_METHOD: {
-			MonoJumpInfoVirtMethod *info;
-			MonoJumpInfoVirtMethod *oinfo = entry->data->data.virt_method;
-
-			info = g_malloc0 (sizeof (MonoJumpInfoVirtMethod));
-			memcpy (info, oinfo, sizeof (MonoJumpInfoVirtMethod));
-			slot = mono_method_lookup_or_register_info (entry->method, entry->in_mrgctx, info, entry->info_type, mono_method_get_context (entry->method));
-			break;
-		}
-		default:
-			g_assert_not_reached ();
-			break;
-		}
+		int slot = mini_get_rgctx_entry_slot (patch_info->data.rgctx_entry);
 
 		target = mono_create_rgctx_lazy_fetch_trampoline (slot);
 		break;
 	}
-	case MONO_PATCH_INFO_GENERIC_CLASS_INIT:
-		target = mono_create_generic_class_init_trampoline ();
-		break;
 	case MONO_PATCH_INFO_MONITOR_ENTER:
 		target = mono_create_monitor_enter_trampoline ();
 		break;
@@ -1740,34 +1686,21 @@ mini_init_gsctx (MonoDomain *domain, MonoMemPool *mp, MonoGenericContext *contex
 
 	if (context && context->class_inst) {
 		inst = context->class_inst;
-		if (domain)
-			gsctx->var_is_vt = mono_domain_alloc0 (domain, sizeof (gboolean) * inst->type_argc);
-		else if (mp)
-			gsctx->var_is_vt = mono_mempool_alloc0 (mp, sizeof (gboolean) * inst->type_argc);
-		else
-			gsctx->var_is_vt = g_new0 (gboolean, inst->type_argc);
-
 		for (i = 0; i < inst->type_argc; ++i) {
 			MonoType *type = inst->type_argv [i];
 
 			if (mini_is_gsharedvt_gparam (type))
-				gsctx->var_is_vt [i] = TRUE;
+				gsctx->is_gsharedvt = TRUE;
 		}
 	}
 	if (context && context->method_inst) {
 		inst = context->method_inst;
-		if (domain)
-			gsctx->mvar_is_vt = mono_domain_alloc0 (domain, sizeof (gboolean) * inst->type_argc);
-		else if (mp)
-			gsctx->mvar_is_vt = mono_mempool_alloc0 (mp, sizeof (gboolean) * inst->type_argc);
-		else
-			gsctx->mvar_is_vt = g_new0 (gboolean, inst->type_argc);
 
 		for (i = 0; i < inst->type_argc; ++i) {
 			MonoType *type = inst->type_argv [i];
 
 			if (mini_is_gsharedvt_gparam (type))
-				gsctx->mvar_is_vt [i] = TRUE;
+				gsctx->is_gsharedvt = TRUE;
 		}
 	}
 }
@@ -2267,7 +2200,7 @@ mono_jit_runtime_invoke (MonoMethod *method, void *obj, void **params, MonoObjec
 			for (i = 0; i < sig->param_count; ++i) {
 				MonoType *t = sig->params [i];
 
-				if (t->type == MONO_TYPE_GENERICINST && mono_class_is_nullable (mono_class_from_mono_type (t)))
+				if (t->byref && t->type == MONO_TYPE_GENERICINST && mono_class_is_nullable (mono_class_from_mono_type (t)))
 					supported = FALSE;
 			}
 
@@ -2632,10 +2565,6 @@ mono_get_delegate_virtual_invoke_impl (MonoMethodSignature *sig, MonoMethod *met
 	if (!method)
 		return NULL;
 
-	/* FIXME Support more cases */
-	if (mono_aot_only)
-		return NULL;
-
 	if (MONO_TYPE_ISSTRUCT (sig->ret))
 		return NULL;
 
@@ -2673,7 +2602,17 @@ mono_get_delegate_virtual_invoke_impl (MonoMethodSignature *sig, MonoMethod *met
 	if (cache [idx])
 		return cache [idx];
 
-	return cache [idx] = mono_arch_get_delegate_virtual_invoke_impl (sig, method, offset, load_imt_reg);
+	/* FIXME Support more cases */
+	if (mono_aot_only) {
+		char tramp_name [256];
+
+		sprintf (tramp_name, "delegate_virtual_invoke%s_%d", load_imt_reg ? "_imt" : "", offset / SIZEOF_VOID_P);
+		cache [idx] = mono_aot_get_trampoline (tramp_name);
+		g_assert (cache [idx]);
+	} else {
+		cache [idx] = mono_arch_get_delegate_virtual_invoke_impl (sig, method, offset, load_imt_reg);
+	}
+	return cache [idx];
 }
 
 static gpointer
@@ -3315,6 +3254,7 @@ register_icalls (void)
 #ifdef MONO_ARCH_EMULATE_FREM
 #if defined(__default_codegen__)
 	register_opcode_emulation (OP_FREM, "__emul_frem", "double double double", fmod, "fmod", FALSE);
+	register_opcode_emulation (OP_RREM, "__emul_rrem", "float float float", fmodf, "fmodf", FALSE);
 #elif defined(__native_client_codegen__)
 	register_opcode_emulation (OP_FREM, "__emul_frem", "double double double", mono_fmod, "mono_fmod", FALSE);
 #endif
@@ -3414,6 +3354,9 @@ register_icalls (void)
 
 	register_icall (mono_object_castclass_with_cache, "mono_object_castclass_with_cache", "object object ptr ptr", FALSE);
 	register_icall (mono_object_isinst_with_cache, "mono_object_isinst_with_cache", "object object ptr ptr", FALSE);
+	register_icall (mono_generic_class_init, "mono_generic_class_init", "void ptr", FALSE);
+	register_icall (mono_fill_class_rgctx, "mono_class_fill_rgctx", "ptr ptr int", FALSE);
+	register_icall (mono_fill_method_rgctx, "mono_method_fill_rgctx", "ptr ptr int", FALSE);
 
 	register_icall (mono_debugger_agent_user_break, "mono_debugger_agent_user_break", "void", FALSE);
 	register_dyn_icall (mono_create_specific_trampoline (NULL, MONO_TRAMPOLINE_GENERIC_CLASS_INIT, mono_get_root_domain (), NULL),
